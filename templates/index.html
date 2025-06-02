@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="mb-4">Your Assets</h1>
+  {% if assets %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Serial #</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Purchased</th>
+          <th>Initial Cost</th>
+          <th>Useful Life (yrs)</th>
+          <th>Current Value (as of {{ today }})</th>
+          <th>% Remaining</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for asset in assets %}
+          <tr>
+            <td>{{ asset.serial_number or "-" }}</td>
+            <td>{{ asset.name }}</td>
+            <td>{{ asset.category }}</td>
+            <td>{{ asset.purchase_date }}</td>
+            <td>{{ asset.initial_cost | usd }}</td>
+            <td>{{ asset.useful_life_years }}</td>
+            <td>{{ asset.depreciated_value(today) | usd }}</td>
+            <td>{{ asset.percent_remaining(today) }}%</td>
+            <td>
+              <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+              <form action="{{ url_for('delete_asset', asset_id=asset.id) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this asset?');">
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No assets yet. <a href="{{ url_for('add_asset') }}">Add your first asset</a>.</p>
+  {% endif %}
+{% endblock %}

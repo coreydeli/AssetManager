@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: asset_db
+    environment:
+      POSTGRES_DB: assetdb
+      POSTGRES_USER: asset_user
+      POSTGRES_PASSWORD: asset_pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: asset_web
+    # No need to override command—ENTRYPOINT in Dockerfile handles migrations + flask run
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql+psycopg2://asset_user:asset_pass@db:5432/assetdb
+      SECRET_KEY: supersecretkey
+
+volumes:
+  pgdata:

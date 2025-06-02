@@ -1,9 +1,8 @@
-fastapi==0.109.2
-uvicorn==0.27.1
-sqlalchemy==2.0.27
-asyncpg==0.29.0
-python-multipart==0.0.9
-pillow==10.2.0
-pydantic==2.6.1
-python-dotenv==1.0.1
-alembic==1.13.1
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+psycopg2-binary
+python-dateutil
+Flask-WTF
+WTForms
+python-decouple

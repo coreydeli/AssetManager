@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Edit Asset: "{{ asset.name }}"</h2>
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.serial_number.label(class="form-label") }}
+      {{ form.serial_number(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.name.label(class="form-label") }}
+      {{ form.name(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.category.label(class="form-label") }}
+      {{ form.category(class="form-select") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.purchase_date.label(class="form-label") }}
+      {{ form.purchase_date(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.initial_cost.label(class="form-label") }}
+      {{ form.initial_cost(class="form-control") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.useful_life_years.label(class="form-label") }}
+      {{ form.useful_life_years(class="form-control") }}
+    </div>
+
+    <button type="submit" class="btn btn-success">{{ form.submit.label.text }}</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+
+  <script>
+    (function() {
+      const costInput = document.getElementById("initial_cost");
+      if (!costInput) return;
+
+      costInput.addEventListener("focus", function(e) {
+        let raw = e.target.value.replace(/[^0-9.]/g, "");
+        e.target.value = raw;
+      });
+
+      costInput.addEventListener("blur", function(e) {
+        let raw = e.target.value.replace(/[^0-9.]/g, "");
+        if (!raw) return;
+        let num = parseFloat(raw);
+        e.target.value = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        }).format(num);
+      });
+
+      const form = costInput.closest("form");
+      if (!form) return;
+      form.addEventListener("submit", function(e) {
+        let raw = costInput.value.replace(/[^0-9.]/g, "");
+        costInput.value = raw;
+      });
+    })();
+  </script>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Add New Asset</h2>
+  <form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.serial_number.label(class="form-label") }}
+      {{ form.serial_number(class="form-control") }}
+      {% for err in form.serial_number.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.name.label(class="form-label") }}
+      {{ form.name(class="form-control") }}
+      {% for err in form.name.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.category.label(class="form-label") }}
+      {{ form.category(class="form-select") }}
+      {% for err in form.category.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.purchase_date.label(class="form-label") }}
+      {{ form.purchase_date(class="form-control") }}
+      {% for err in form.purchase_date.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.initial_cost.label(class="form-label") }}
+      {{ form.initial_cost(class="form-control") }}
+      {% for err in form.initial_cost.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.useful_life_years.label(class="form-label") }}
+      {{ form.useful_life_years(class="form-control") }}
+      {% for err in form.useful_life_years.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+
+  <script>
+    (function() {
+      const costInput = document.getElementById("initial_cost");
+      if (!costInput) return;
+
+      costInput.addEventListener("focus", function(e) {
+        let raw = e.target.value.replace(/[^0-9.]/g, "");
+        e.target.value = raw;
+      });
+
+      costInput.addEventListener("blur", function(e) {
+        let raw = e.target.value.replace(/[^0-9.]/g, "");
+        if (!raw) return;
+        let num = parseFloat(raw);
+        e.target.value = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        }).format(num);
+      });
+
+      const form = costInput.closest("form");
+      if (!form) return;
+      form.addEventListener("submit", function(e) {
+        let raw = costInput.value.replace(/[^0-9.]/g, "");
+        costInput.value = raw;
+      });
+    })();
+  </script>
+{% endblock %}
